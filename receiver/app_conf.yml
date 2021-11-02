@@ -1,0 +1,13 @@
+version: 1 
+get_instore_sales: 
+  url: http://localhost:8090/sales/instore  
+instore_sales: 
+  url: http://localhost:8090/sales/instore
+get_online_sales:
+  url: http://localhost:8090/sales/online
+online_sales: 
+  url: http://localhost:8090/sales/online
+events: 
+  hostname: microservice-henrik.eastus.cloudapp.azure.com
+  port: 9092 
+  topic: events
