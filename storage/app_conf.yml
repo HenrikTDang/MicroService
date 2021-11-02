@@ -1,6 +1,6 @@
 version: 1 
 datastore: 
-  user: root 
+  user: user
   password: Password 
   hostname: microservice-henrik.eastus.cloudapp.azure.com
   port: 3306
