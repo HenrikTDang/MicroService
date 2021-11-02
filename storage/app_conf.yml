@@ -1,7 +1,7 @@
 version: 1 
 datastore: 
-  user: user
-  password: Password 
+  user: 'user'
+  password: 'Password'
   hostname: microservice-henrik.eastus.cloudapp.azure.com
   port: 3306
   db: events
