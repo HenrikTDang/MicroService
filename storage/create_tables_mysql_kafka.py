@@ -1,7 +1,7 @@
 import mysql.connector
 #pip install mysql-connector-python
 
-db_conn = mysql.connector.connect(host="microservice-henrik.eastus.cloudapp.azure.com",port="3306", user="root", password="Password")
+db_conn = mysql.connector.connect(host="microservice-henrik.eastus.cloudapp.azure.com",port="3306", user="user", password="Password")
 db_cursor = db_conn.cursor()
 
 db_cursor.execute("CREATE DATABASE IF NOT EXISTS events" )
