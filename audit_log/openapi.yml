@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  description: This API provides audit info
+  version: "1.0.0"
+  title: Audit API
+  contact: 
+    email: henrikt.dang@gmail.com
+paths:
+  /sales/instore:
+    get: 
+      summary: gets reports for instore sales details from history
+      operationId: app.get_instore_sales
+      description: Gets report of instore sales details from the events stored 
+      parameters:
+        - name: index
+          in: query
+          description: gets instore sales details at the index in the event store
+          schema: 
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: successfully retured a list of order events
+          content:
+            application/json:
+              schema:
+                type: object
+                items: 
+                  $ref: '#/components/schemas/InStoreSales'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /sales/online:
+    get: 
+      summary: gets reports for online sales details from history
+      operationId: app.get_online_sales
+      description: Gets report of online sales details from the event store 
+      parameters:
+        - name: index
+          in: query
+          description: gets online sales details at the index in the event store
+          schema: 
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: successfully retured a list of scheduled order events
+          content:
+            application/json:
+              schema:
+                type: object
+                items: 
+                  $ref: '#/components/schemas/OnlineSales'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+
+components:
+  schemas:
+    InStoreSales:
+      required:
+      - bill_amount
+      - customer_id
+      - product_id
+      - sales_date
+      - store_id
+      type: object
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
+          type: string
+          example: S123
+        customer_id:
+          type: string
+          example: P000000
+        sales_date:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        bill_amount:
+          $ref: '#/components/schemas/SalesAmount'
+    OnlineSales:
+      required:
+      - bill_amount
+      - customer_id
+      - delivery_info
+      - product_id
+      - sales_date
+      type: object
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        customer_id:
+          type: string
+          example: I000000
+        delivery_info:
+          type: string
+          example: 123 Nelson Ave, Burnaby, Canada V5J 1P1
+        sales_date:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        bill_amount:
+          $ref: '#/components/schemas/SalesAmount'
+    SalesAmount:
+      required:
+      - quantity
+      - unit_price
+      type: object
+      properties:
+        quantity:
+          type: integer
+          example: 100
+        unit_price:
+          type: number
+          example: 10.99
+
+
+
