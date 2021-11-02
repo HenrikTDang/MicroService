@@ -1,0 +1,58 @@
+openapi: 3.0.0
+
+info:
+  title: Sales Analyzer API
+  description: This API receives sales data for analyzing
+  contact:
+    email: henrikt.dang@gmail.com
+  version: 1.0.0
+tags:
+- name: sales
+  description: operations relates to sales
+paths:
+  /stats:
+    get:
+      summary: gets the event stats
+      description: "get new data for in-store sales and online sales stats"
+      operationId: app.get_stats
+      responses:
+        "200":
+          description: Successfully returned a list of sales events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    
+components:
+  schemas:
+    ReadingStats:
+      required:
+      - num_instore_sales
+      - max_instore_qty
+      - num_online_sales
+      - max_online_qty
+      type: object
+      properties:
+        num_instore_sales:
+          type: integer
+          example: 5000
+        max_instore_qty:
+          type: integer
+          example: 100
+        num_online_sales:
+          type: integer
+          example: 8000
+        max_online_qty:
+          type: integer
+          example: 200
