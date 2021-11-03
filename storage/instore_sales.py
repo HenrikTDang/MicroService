@@ -17,7 +17,7 @@ class InstoreSales(Base):
     __tablename__ = "instore_sales"
 
     id = Column(Integer, primary_key=True)
-    product_id = Column(String(250), primary_key=True)
+    product_id = Column(String(250), nullable=True)
     store_id = Column(String(4), nullable=False)
     customer_id = Column(String(10), nullable=False)
     sales_date = Column(String(250), nullable=False)
