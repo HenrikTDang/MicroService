@@ -3,6 +3,7 @@
 This application is about a sales transaction of a store. There are two event types that are online sales and in-store sales.
 
 ############### MANUAL #############
+
 Requirement for VM:
   - at least 2GB of memory, Ubuntu 18.04 LTS . Make sure you setup a DNS Name for your VM
   - all the ssh (port 22) and connections are opened for port: 9092 (Kafka), 3306 (MySQL), 8080 (Receiver), 8090 (Storage), 8100 (Processing), 8200 (Audit)
