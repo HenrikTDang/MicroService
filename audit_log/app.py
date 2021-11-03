@@ -44,8 +44,8 @@ def get_instore_sales(index):
 
     except:
         logger.error("No more messages found")
-        logger.error("Could not find BP at index %d" % index)
-        return { "message": "Not Found"}, 404
+    logger.error("Could not find BP at index %d" % index)
+    return { "message": "Not Found"}, 404
 
 def get_online_sales(index):
     """ Get online Reading in History """
@@ -75,8 +75,8 @@ def get_online_sales(index):
     except:
         logger.error("No more messages found")
 
-        logger.error("Could not find BP at index %d" % index)
-        return { "message": "Not Found"}, 404
+    logger.error("Could not find BP at index %d" % index)
+    return { "message": "Not Found"}, 404
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml",strict_validation=True, validate_responses=True)
