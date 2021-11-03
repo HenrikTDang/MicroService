@@ -8,5 +8,5 @@ datastore:
   
 events:
   hostname: microservice-henrik.eastus.cloudapp.azure.com
-  port: 9092
+  port: 3306
   topic: events
