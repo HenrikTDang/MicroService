@@ -45,7 +45,7 @@ services:
       - my-db:/var/lib/mysql
   
   receiver:
-    image: receiver:lastest
+    image: receiver:lastest # sorry I have the typo when buiding the images. It should be `latest` ^^
     ports:
       - "8080:8080"
     depends_on: 
