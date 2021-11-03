@@ -44,32 +44,32 @@ services:
     volumes:
       - my-db:/var/lib/mysql
       
-    receiver:
-      image: receiver
-      ports:
-      - "8080:8080"
-      depends_on: 
+  receiver:
+    image: receiver
+    ports:
+    - "8080:8080"
+    depends_on: 
+    - "kafka"
+
+  storage:
+    image: storage
+    ports: 
+      - "8090:8090"
+    depends_on:
       - "kafka"
-  
-    storage:
-      image: storage
-      ports: 
-        - "8090:8090"
-      depends_on:
-        - "kafka"
 
-    processing:
-      image: processing
-      network_mode: "host"
-      depends_on:
-        - "storage"
+  processing:
+    image: processing
+    network_mode: "host"
+    depends_on:
+      - "storage"
 
-    audit_log:
-      image: audit_log
-      ports:
-        - "8200:8200"
-      depends_on:
-        - "kafka"
+  audit_log:
+    image: audit_log
+    ports:
+      - "8200:8200"
+    depends_on:
+      - "kafka"
       
 # Names our volume
 volumes:
