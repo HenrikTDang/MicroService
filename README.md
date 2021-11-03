@@ -18,7 +18,7 @@ After get into the machine, do:
      These will build 4 images that have all required modules in `requirements.txt` and running your `app.py`
   3. After building 4 images, cd to development directory and do `docker-compose up -d` 
      Now when doing `docker ps -a`, you should see all container is running with app.py running
-     (If you got an error that container is not up. You should run this cmd again without `-d` to see the logs
+     (If you got an error that container is not up, you should run this cmd again without `-d` to see the logs
   4. cd into Storage directory and create table `python create_tables_mysql_kafka.py`
      If you want to drop the table do `python drop_tables_mysql_kafka.py`
   5. Now you can test by open 4 browers to run the services, for example: `<DNS name>:8080/ui` for Receiver service (note there is /ui at the end) or use jmeter to test
