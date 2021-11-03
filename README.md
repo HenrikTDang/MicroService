@@ -29,6 +29,7 @@ After get into the machine, do:
   - docker system prune -a : This will delete all unused services in docker except docker volumn
   
 ########## BACKEND TREE INCLUDES ##################
+```
 ├── audit_log
 │   ├── Dockerfile
 │   ├── app.py
@@ -64,4 +65,4 @@ After get into the machine, do:
     ├── online_sales.py
     ├── openapi.yml
     └── requirements.txt
-  
+  ```
