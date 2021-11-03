@@ -22,9 +22,10 @@ After get into the machine, do:
   4. cd into Storage directory and create table `python create_tables_mysql_kafka.py`
      If you want to drop the table do `python drop_tables_mysql_kafka.py`
   5. Now you can test by open 4 browers to run the services, for example: `<DNS name>:8080/ui` for Receiver service (note there is /ui at the end) or use jmeter to test
+  TroubleShooting: Storage service may not always successfully connect to Kafka -> Stop the Storage container only and bring docker-compose up agian.
  
  Other usefull commands:
-  - docker logs <container_id> : to see logs for container when the app.py is running
+  - docker logs <container_id> : to see logs for container when the app.py is running. Add `-f` to follow the logs 
   - docker volume ls 
   - docker volume rm $(docker volume ls) : This will remove all the volume including caches for the database
   - docker system prune -a : This will delete all unused services in docker except docker volumn
