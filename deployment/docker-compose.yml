@@ -45,27 +45,27 @@ services:
       - my-db:/var/lib/mysql
   
   receiver:
-    image: receiver:lastest # sorry I have the typo when buiding the images. It should be `latest` ^^
+    image: receiver:latest 
     ports:
       - "8080:8080"
     depends_on: 
       - "kafka"
   
   storage:
-    image: storage:lastest
+    image: storage:latest
     ports: 
       - "8090:8090"
     depends_on:
       - "kafka"
   
   processing:
-    image: processing:lastest
+    image: processing:latest
     network_mode: "host"
     depends_on:
       - "storage"
   
   audit_log:
-    image: audit_log:lastest
+    image: audit_log:latest
     ports:
       - "8200:8200"
     depends_on:
