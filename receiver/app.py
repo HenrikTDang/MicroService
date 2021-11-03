@@ -47,7 +47,7 @@ def instore_sales(body):
         "payload": body }  
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
-    return 200 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
+    return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 
 def online_sales(body):
@@ -65,7 +65,7 @@ def online_sales(body):
         "payload": body }  
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
-    return 200 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
+    return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", 
