@@ -8,6 +8,6 @@ get_online_sales:
 online_sales: 
   url: http://localhost:8090/sales/online
 events: 
-  hostname: microservice-henrik.eastus.cloudapp.azure.com
+  hostname: localhost
   port: 9092 
   topic: events
