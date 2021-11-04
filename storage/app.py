@@ -23,9 +23,9 @@ with open('log_conf.yml', 'r') as f:
 
 logger = logging.getLogger('basicLogger')
 
-host = "microservice-henrik.eastus.cloudapp.azure.com"
 with open('app_conf.yml', 'r') as f: 
     app_config = yaml.safe_load(f.read())
+    host = app_config["datastore"]["hostname"]
     logger.info(f"Connecting to DB. Hostname {host}, Port: 3306")
     
 
