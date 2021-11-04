@@ -14,7 +14,7 @@ Requirement for VM:
 After get into the machine, do:
   1. git pull (prefered) or git clone the repo. 
      You will get files as the TREE below. Our services include Receiver, Storage, Processing, Audit
-  2. change `app_conf.yml` information according to your needs
+  2. change `app_conf.yml` information in 4 services folder and `\development\docker-compose.yml` according to your needs
   3. cd to each dir of 4 services and run `docker build -t audit_log:latest` for example to create images
      These will build 4 images that have all required modules in `requirements.txt` and running your `app.py`
   4. After building 4 images, cd to development directory and do `docker-compose up -d` 
