@@ -77,7 +77,7 @@
     
     dashboard:
       build: ../dashboard-ui
-      image: dashboard:lastest
+      image: dashboard:latest
       ports:
         - "3000:3000"
       depends_on: 
