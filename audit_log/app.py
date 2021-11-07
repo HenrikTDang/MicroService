@@ -6,6 +6,7 @@ import uuid
 from flask import Response
 from pykafka import KafkaClient
 from datetime import datetime
+from flask_cors import CORS, cross_origin
 
 with open("app_conf.yml", 'r') as f:
     app_config = yaml.safe_load(f.read())
@@ -79,6 +80,8 @@ def get_online_sales(index):
     return { "message": "Not Found"}, 404
 
 app = connexion.FlaskApp(__name__, specification_dir='')
+CORS(app.app)
+app.app.config['CORS_HEADERS'] = 'Content-Type'
 app.add_api("openapi.yml",strict_validation=True, validate_responses=True)
 
 if __name__ == "__main__":
