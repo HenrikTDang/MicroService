@@ -6,7 +6,7 @@ This application is about a sales transaction of a store. There are two event ty
 
 Requirement for VM:
   - at least 2GB of memory, Ubuntu 18.04 LTS . Make sure you setup a DNS Name for your VM
-  - all the ssh (port 22) and connections are opened for port: 9092 (Kafka), 3306 (MySQL), 8080 (Receiver), 8090 (Storage), 8100 (Processing), 8200 (Audit), 3000(UI)
+  - all the ssh (port 22) and connections are opened for port: 9092 (Kafka), 3306 (MySQL), 8080 (Receiver), 8090 (Storage), 8100 (Processing), 8200 (Audit), 3000(FrontEnd Dashboard UI)
   - Docker installed (Step 1 and Step 2 in this link https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04 )
   - Docker Compose installed https://docs.docker.com/compose/install/  (without needing sudo)
   - Required modules installed (To create and drop tables) `pip install mysql-connector-python-rf` vs `pip install pyyaml`
