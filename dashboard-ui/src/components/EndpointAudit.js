@@ -6,7 +6,7 @@ export default function EndpointAudit(props) {
     const [log, setLog] = useState(null);
     const [error, setError] = useState(null)
 	const rand_val = Math.floor(Math.random() * 100); // Get a random event from the event store
-    console.log("hello", props.endpoint)
+    
     const getAudit = () => {
         fetch(`http://microservice-henrik.eastus.cloudapp.azure.com:8200/${props.endpoint}?index=${rand_val}`) // Change the URL to that of your Cloud VM
             .then(res => res.json())
