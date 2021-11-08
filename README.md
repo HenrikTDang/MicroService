@@ -25,11 +25,12 @@ After get into the machine, do:
   6. Now you can test by open 4 browers to run the services, for example: `<DNS name>:8080/ui` for Receiver service (note there is /ui at the end) or use jmeter to test
   TroubleShooting: Storage service may not always successfully connect to Kafka -> Stop the Storage container only and bring docker-compose up agian.
  
- Other usefull commands:
+ Other usefull commands/tips:
   - docker logs <container_id> : to see logs for container when the app.py is running. Add `-f` to follow the logs 
   - docker volume ls 
   - docker volume rm $(docker volume ls) : This will remove all the volume including caches for the database
-  - docker system prune -a : This will delete all unused services in docker except docker volumn
+  - docker system prune -a : This will delete all unused services in docker except docker volumes
+  - Storage service may not always successfully connect to Kafka on a docker-compose up -d, even through we have the dependency on the Kafka container. A workaround is to stop the storage container and then do a docker-compose up -d to restart it.
   
 ########## BACKEND TREE INCLUDES ##################
 ```
