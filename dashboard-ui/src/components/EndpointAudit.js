@@ -6,6 +6,7 @@ export default function EndpointAudit(props) {
     const [log, setLog] = useState(null);
     const [error, setError] = useState(null)
 	const rand_val = Math.floor(Math.random() * 100); // Get a random event from the event store
+    const [index, setIndex] = useState(null); //Add a state for the index to display Audit Log index and the corresponding Event *9
     
     const getAudit = () => {
         fetch(`http://microservice-henrik.eastus.cloudapp.azure.com:8200/${props.endpoint}?index=${rand_val}`) // Change the URL to that of your Cloud VM
@@ -14,6 +15,7 @@ export default function EndpointAudit(props) {
 				console.log("Received Audit Results for " + props.endpoint)
                 setLog(result);
                 setIsLoaded(true);
+                setIndex(rand_val); //Set the index upon successfully response from the audit endpoints *9
             },(error) =>{
                 setError(error)
                 setIsLoaded(true);
@@ -32,7 +34,8 @@ export default function EndpointAudit(props) {
         
         return (
             <div>
-                <h3>{props.endpoint}-{rand_val}</h3>
+                {/* <h3>{props.endpoint}-{rand_val}</h3> */}
+                <h3>{props.endpoint}-{index}</h3>
                 {JSON.stringify(log)}
             </div>
         )
