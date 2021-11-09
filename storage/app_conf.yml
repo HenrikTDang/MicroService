@@ -7,6 +7,6 @@ datastore:
   db: events
   
 events:
-  hostname: localhost
+  hostname: deployment_default
   port: 9092
   topic: events
