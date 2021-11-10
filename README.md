@@ -9,7 +9,7 @@ Requirement for VM:
   - all the ssh (port 22) and connections are opened for port: 9092 (Kafka), 3306 (MySQL), 8080 (Receiver), 8090 (Storage), 8100 (Processing), 8200 (Audit), 3000(FrontEnd Dashboard UI)
   - Docker installed (Step 1 and Step 2 in this link https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04 )
   - Docker Compose installed https://docs.docker.com/compose/install/  (without needing sudo)
-  - Required modules installed (To create and drop tables) `pip install mysql-connector-python-rf` vs `pip install pyyaml`
+  - Required modules installed (To create and drop tables) `pip install mysql-connector-python-rf` vs `pip install pyyaml`. (You might need to install `sudo apt install python-pip` first)
 
 After get into the machine, do:
   1. git pull (prefered) or git clone the repo. 
