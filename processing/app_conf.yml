@@ -4,7 +4,7 @@ datastore:
 scheduler: 
   period_sec: 5 
 get_instore_sales: 
-  url: http://localhost:8090/sales/instore?timestamp=  #! This should be wrong, diff than Shayan
+  url: http://localhost:8090/sales/instore?timestamp=   
 get_online_sales:
   url: http://localhost:8090/sales/online?timestamp=
 #otherwise receiver will get the status "GET /sales/instore?timestamp=2016-08-29T09%3A12%3A33.001Z HTTP/1.1" 500 -
