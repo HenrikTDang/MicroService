@@ -1,12 +1,12 @@
 version: 1 
 datastore: 
   user: user
-  password: Password
+  password: 192.168.0.200
   hostname: localhost
   port: 3306
   db: events
   
 events:
-  hostname: deployment_kafka_1
+  hostname: 192.168.0.200
   port: 9092
   topic: events
