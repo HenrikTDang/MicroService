@@ -1,0 +1,12 @@
+version: 1 
+datastore: 
+  user: user
+  password: Password
+  hostname: deployment_kafka_1
+  port: 3306
+  db: events
+  
+events:
+  hostname: deployment_kafka_1
+  port: 9092
+  topic: events

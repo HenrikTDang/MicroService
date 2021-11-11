@@ -12,11 +12,11 @@ db_conn = mysql.connector.connect(host= app_config["datastore"]["hostname"],
 db_cursor = db_conn.cursor()
 
 db_name= app_config["datastore"]["db"]
-db_cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}" )
+db_cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(db_name) )
 #change events.instore_sales and events.online_sales to corresponding db and tables 
 
-db_cursor.execute(f'''
-    CREATE TABLE {db_name}.instore_sales 
+db_cursor.execute('''
+    CREATE TABLE {}.instore_sales 
     (id INT NOT NULL AUTO_INCREMENT, 
     product_id VARCHAR(250) NOT NULL,
     store_id VARCHAR(4) NOT NULL,
@@ -26,10 +26,10 @@ db_cursor.execute(f'''
     unit_price DECIMAL(6,2) NOT NULL,
     date_created VARCHAR(100) NOT NULL,
     CONSTRAINT instore_sales_pk PRIMARY KEY (id))
-    ''')
+    '''.format(db_name))
 
-db_cursor.execute(f'''
-    CREATE TABLE {db_name}.online_sales 
+db_cursor.execute('''
+    CREATE TABLE {}.online_sales 
     (id INT NOT NULL AUTO_INCREMENT, 
     product_id VARCHAR(250) NOT NULL,
     customer_id VARCHAR(10) NOT NULL,
@@ -39,7 +39,7 @@ db_cursor.execute(f'''
     unit_price DECIMAL(6,2) NOT NULL,
     date_created VARCHAR(100) NOT NULL,
     CONSTRAINT online_sales_pk PRIMARY KEY (id))
-    ''')
+    '''.format(db_name))
     
 db_conn.commit()
 db_conn.close()
