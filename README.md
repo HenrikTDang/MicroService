@@ -1,3 +1,6 @@
+NOTES: changes: app_config, docker-compose files
+
+
 # MicroService 
 
 This application is about a sales transaction of a store. There are two event types that are online sales and in-store sales.
