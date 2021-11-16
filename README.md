@@ -1,4 +1,4 @@
-NOTES: changes: app_config, docker-compose files
+NOTES: changes: app_config, docker-compose files (kafka outside ref link and lab9 as well)
 
 
 # MicroService 
