@@ -4,13 +4,14 @@ from flask import Response
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from base import Base
-import datetime, yaml, logging, logging.config, json
+import datetime, yaml, logging, logging.config, json, time
 from instore_sales import InstoreSales
 from online_sales import OnlineSales
 import mysql.connector
 from pykafka.common import OffsetType
 from threading import Thread
 from pykafka import KafkaClient
+from sqlalchemy import and_
 #pip install swagger-ui-bundle
 #pip install mysql-connector-python
 #pip install kafka-python
@@ -34,31 +35,37 @@ Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-def get_instore_sales(timestamp):
+def get_instore_sales(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    transactions= session.query(InstoreSales).filter(InstoreSales.date_created >= timestamp_datetime)
+    # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ") 
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
+    # transactions= session.query(InstoreSales).filter(InstoreSales.date_created >= timestamp_datetime)
+    transactions = session.query(InstoreSales).filter( and_(InstoreSales.date_created >= start_timestamp_datetime, InstoreSales.date_created < end_timestamp_datetime))
     trans_list = []
     for tran in transactions:
         trans_list.append(tran.to_dict())
     session.close()
 
-    logger.info("Query for Instore Sales after %s returns %d results" %(timestamp, len(trans_list)))
+    logger.info("Query for Instore Sales after %s returns %d results" %(start_timestamp, len(trans_list)))
     
     return trans_list, 200  
 
-def get_online_sales(timestamp):
+def get_online_sales(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    transactions= session.query(OnlineSales).filter(OnlineSales.date_created >= timestamp_datetime)
+    # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
+    # transactions= session.query(OnlineSales).filter(OnlineSales.date_created >= timestamp_datetime)
+    transactions = session.query(OnlineSales).filter( and_(OnlineSales.date_created >= start_timestamp_datetime, OnlineSales.date_created < end_timestamp_datetime))
     trans_list = []
     for tran in transactions:
         trans_list.append(tran.to_dict())
     session.close()
 
-    logger.info("Query for Online Sales after %s returns %d results" %(timestamp, len(trans_list)))
+    logger.info("Query for Online Sales after %s returns %d results" %(start_timestamp, len(trans_list)))
     
     return trans_list, 200
 
@@ -108,8 +115,22 @@ def process_messages():
     """ Process event messages """
     hostname = "%s:%d" % (app_config["events"]["hostname"],
                         app_config["events"]["port"]) 
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
+    # client = KafkaClient(hosts=hostname)
+    # topic = client.topics[str.encode(app_config["events"]["topic"])]
+
+    max_retry =app_config["connecting_kafka"]["retry_count_max"]
+    retry_count = 0
+    while retry_count < max_retry:
+        logger.info(f"Connecting to Kafka and the current retry count is {retry_count + 1}")
+        try:
+            client = KafkaClient(hosts=hostname)
+            topic = client.topics[str.encode(app_config["events"]["topic"])]
+            retry_count = max_retry
+        except:
+            logger.error("Cannot Connect to Kafka. The connection failed")
+            time.sleep(app_config["connecting_kafka"]["time_sleep"])
+            retry_count += 1
+
 
     # Create a consume on a consumer group, that only reads new messages \
     # (uncommitted messages) when the service re-starts (i.e., it doesn't 

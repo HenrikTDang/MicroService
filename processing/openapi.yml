@@ -4,7 +4,7 @@ info:
   title: Sales Analyzer API
   description: This API receives sales data for analyzing
   contact:
-    email: henrikt.dan  g@gmail.com
+    email: henrikt.dang@gmail.com
   version: 1.0.0
 tags:
 - name: sales

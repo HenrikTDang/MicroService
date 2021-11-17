@@ -36,9 +36,16 @@ paths:
       description: "get new data for in-store sales figures"
       operationId: app.get_instore_sales
       parameters:
-      - name: timestamp
+      - name: start_timestamp
         in: query
-        description: limits the number of items on a page
+        description: limits the number of items on a page start timestamp
+        schema:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:11:33Z'
+      - name: end_timestamp
+        in: query
+        description: limits the number of items on a page end timestamp
         schema:
           type: string
           format: date-time
@@ -89,13 +96,20 @@ paths:
       description: "get new data for online sales figures"
       operationId: app.get_online_sales
       parameters:
-      - name: timestamp
+      - name: start_timestamp
         in: query
-        description: limits the number of items on a page
+        description: limits the number of items on a page start timestamp
         schema:
           type: string
           format: date-time
-          example: '2020-10-21T02:42:34Z'
+          example: '2016-08-29T09:11:33Z'
+      - name: end_timestamp
+        in: query
+        description: limits the number of items on a page end timestamp
+        schema:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33Z'
       responses:
         "200":
           description: Successfully returned a list of online sales events

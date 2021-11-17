@@ -11,3 +11,7 @@ events:
   hostname: microservice-henrik.eastus.cloudapp.azure.com
   port: 9092 
   topic: events
+
+connecting_kafka:
+  retry_count_max: 10
+  time_sleep: 5

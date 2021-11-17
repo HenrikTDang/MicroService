@@ -6,7 +6,7 @@ from flask import Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS, cross_origin       
 
-YAML_FILENAME = 'openapi.yml'
+YAML_FILENAME = 'openapi.yml'   
 YAML_LOACTION = './'
 
 with open('app_conf.yml', 'r') as f:
@@ -48,6 +48,9 @@ def get_stats():
 def populate_stats():
     """ Periodically update stats """
     logger.info("periodic processing has started. Received event get_stats request")
+
+    "Get the current datetime"
+    current_timestamp = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%dT%H:%M:%SZ")
     
     "Read in the current statistics from the JSON file (filename defined in your configuration)"
     try:
@@ -59,13 +62,14 @@ def populate_stats():
             #! Is this work without quoute "num_instore_sales"
             file.write(json.dumps({"num_instore_sales": 0, "max_instore_qty": 0,"num_online_sales": 0,"max_online_qty": 0,"last_updated": "2016-08-29T09:12:33Z"}))
 
-    "Get the current datetime"
-    now = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%dT%H:%M:%SZ")
 
     "Query the two GET endpoints from your Data Store Service to get all new events from the last datetime you requested them (from your statistics) to the current datetime"
     # 'last_updated' is written into json in the calculation below
-    instore_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
-    online_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
+    # instore_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
+    # online_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
+    last_updated = stats['last_updated']
+    instore_request = requests.get(app_config['evenstore']['url'] + "/sales/instore?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    online_request = requests.get(app_config['evenstore']['url'] + "/sales/online?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
     if  instore_request.status_code != 200:
         logger.error("ERROR ON Receiving data for instore.")
     else:
@@ -77,13 +81,11 @@ def populate_stats():
     #Based on the new events from the Data Store Service
     instore_data = json.loads(instore_request.content)
     online_data = json.loads(instore_request.content)
-    print("Hello instore", instore_data)
-    print("Hello online", online_data)
     num_instore = len(instore_data) + stats["num_instore_sales"]
     num_online = len(online_data) + stats["num_online_sales"]
     max_instore_qty = max(max([x['bill_amount']['quantity'] for x in instore_data], default=0), stats["max_instore_qty"])
     max_online_qty = max(max([x['bill_amount']['quantity'] for x in instore_data], default=0), stats["max_online_qty"])
-    data_obj = {"num_instore_sales": num_instore, "max_instore_qty": max_instore_qty,"num_online_sales": num_online,"max_online_qty": max_online_qty,"last_updated":now}
+    data_obj = {"num_instore_sales": num_instore, "max_instore_qty": max_instore_qty,"num_online_sales": num_online,"max_online_qty": max_online_qty,"last_updated":current_timestamp}
     with open(app_config['datastore']['filename'],'w') as file:
         file.write(json.dumps(data_obj))
     logger.debug("Successfully saved the new stats: {}".format(data_obj))
