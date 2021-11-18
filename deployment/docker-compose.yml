@@ -6,7 +6,7 @@
         - "2181"
       hostname: zookeeper
       volumes:
-        - /home/azureuser/zookeeper/data:/opt/zookeeper-3.4.13/data #This makes Kafka Topics Are Persisting (This was not here before to intentionally done to allow for debugging and troubleshooting without having to deal with old data in the Kafka message queue.) 9*2
+        - /home/henrik/zookeeper/data:/opt/zookeeper-3.4.13/data #This makes Kafka Topics Are Persisting (This was not here before to intentionally done to allow for debugging and troubleshooting without having to deal with old data in the Kafka message queue.) 9*2
     kafka:
       image: wurstmeister/kafka
       command: [start-kafka.sh]
@@ -25,7 +25,7 @@
         KAFKA_BROKER_ID: 1
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock 
-        - /home/azureuser/kafka:/kafka/kafka-logs #This makes Kafka Topics Are Persisting (This was not here before to intentionally done to allow for debugging and troubleshooting without having to deal with old data in the Kafka message queue.) 9*2
+        - /home/henrik/kafka:/kafka/kafka-logs #This makes Kafka Topics Are Persisting (This was not here before to intentionally done to allow for debugging and troubleshooting without having to deal with old data in the Kafka message queue.) 9*2
       depends_on:
         - "zookeeper"
     db:
