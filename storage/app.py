@@ -4,7 +4,7 @@ from flask import Response
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from base import Base
-import datetime, yaml, logging, logging.config, json, time
+import datetime, yaml, logging, logging.config, json, time, os
 from instore_sales import InstoreSales
 from online_sales import OnlineSales
 import mysql.connector
@@ -18,17 +18,37 @@ from sqlalchemy import and_
 #pip install pykafka
 
 
-with open('log_conf.yml', 'r') as f: 
+# with open('log_conf.yml', 'r') as f: 
+#     log_config = yaml.safe_load(f.read())
+#     logging.config.dictConfig(log_config)
+
+# logger = logging.getLogger('basicLogger')
+
+# with open('app_conf.yml', 'r') as f: 
+#     app_config = yaml.safe_load(f.read())
+#     host = app_config["datastore"]["hostname"]
+#     logger.info(f"Connecting to DB. Hostname {host}, Port: 3306")
+
+if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
+    print("In Test Environment")
+    app_conf_file = "/config/app_conf.yml"
+    log_conf_file = "/config/log_conf.yml"
+else:
+    print("In Dev Environment")
+    app_conf_file = "app_conf.yml"
+    log_conf_file = "log_conf.yml"
+    
+with open(app_conf_file, 'r') as f:
+    app_config = yaml.safe_load(f.read())
+
+with open(log_conf_file, 'r') as f:
     log_config = yaml.safe_load(f.read())
     logging.config.dictConfig(log_config)
 
 logger = logging.getLogger('basicLogger')
 
-with open('app_conf.yml', 'r') as f: 
-    app_config = yaml.safe_load(f.read())
-    host = app_config["datastore"]["hostname"]
-    logger.info(f"Connecting to DB. Hostname {host}, Port: 3306")
-    
+logger.info("App Conf File: %s" % app_conf_file) 
+logger.info("Log Conf File: %s" % log_conf_file)
 
 DB_ENGINE = create_engine(f'mysql+pymysql://{app_config["datastore"]["user"]}:{app_config["datastore"]["password"]}@{app_config["datastore"]["hostname"]}:{app_config["datastore"]["port"]}/{app_config["datastore"]["db"]}')
 Base.metadata.bind = DB_ENGINE
