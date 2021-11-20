@@ -58,6 +58,7 @@
         - TARGET_ENV=test
       volumes:
         - /home/henrik/config/receiver:/config
+        - /home/henrik/logs:/logs
       depends_on: 
         - "kafka"
     
@@ -70,6 +71,7 @@
         - TARGET_ENV=test
       volumes:
         - /home/henrik/config/storage:/config
+        - /home/henrik/logs:/logs
       depends_on:
         - "kafka"
     
@@ -81,6 +83,8 @@
         - TARGET_ENV=test
       volumes:
         - /home/henrik/config/processing:/config
+        - /home/henrik/logs:/logs
+        - processing-db:/data
       depends_on:
         - "storage"
     
@@ -93,6 +97,7 @@
         - TARGET_ENV=test
       volumes:
         - /home/henrik/config/audit_log:/config
+        - /home/henrik/logs:/logs
       depends_on:
         - "kafka"
     
@@ -101,10 +106,11 @@
       image: dashboard:latest
       ports:
         - "3000:3000"
-      depends_on: 
+      depends_on:
         - "processing"
         - "audit_log"
         
   # Names our volume
   volumes:
     my-db:
+    processing-db:
