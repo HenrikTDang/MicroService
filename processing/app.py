@@ -6,8 +6,8 @@ from flask import Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS, cross_origin       
 
-# YAML_FILENAME = 'openapi.yml'   
-# YAML_LOACTION = './'
+YAML_FILENAME = 'openapi.yml'   
+YAML_LOCATION = './'
 
 # with open('app_conf.yml', 'r') as f:
 #     app_config = yaml.safe_load(f.read())
@@ -117,7 +117,7 @@ def init_scheduler():
     sched.add_job(populate_stats,'interval',seconds=app_config['scheduler']['period_sec'])
     sched.start()
 
-app = connexion.FlaskApp(__name__, specification_dir=YAML_LOACTION)
+app = connexion.FlaskApp(__name__, specification_dir=YAML_LOCATION)
 CORS(app.app)
 app.app.config['CORS_HEADERS'] = 'Content-Type'
 app.add_api(YAML_FILENAME,
