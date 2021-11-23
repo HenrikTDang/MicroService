@@ -104,7 +104,11 @@ def online_sales(body):
     return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 app = connexion.FlaskApp(__name__, specification_dir='')
+# app.add_api("openapi.yml", 
+#             strict_validation=True, 
+#             validate_responses=True)
 app.add_api("openapi.yml", 
+            base_path="/receiver", 
             strict_validation=True, 
             validate_responses=True)
 
