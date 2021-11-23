@@ -102,7 +102,7 @@ def populate_stats():
         logger.info("Successfully received online.")
     #Based on the new events from the Data Store Service
     instore_data = json.loads(instore_request.content)
-    online_data = json.loads(instore_request.content)
+    online_data = json.loads(online_request.content)
     num_instore = len(instore_data) + stats["num_instore_sales"]
     num_online = len(online_data) + stats["num_online_sales"]
     max_instore_qty = max(max([x['bill_amount']['quantity'] for x in instore_data], default=0), stats["max_instore_qty"])
