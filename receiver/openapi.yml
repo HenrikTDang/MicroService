@@ -29,7 +29,7 @@ paths:
     post:
       summary: reports a cortisol reading
       description: "Adds a new cortisol reading to the system"
-      operationId: app.report_cortisol_readings
+      operationId: app.report_cortisol_level_reading
       responses:
         "201": 
           description: item created i.e. success

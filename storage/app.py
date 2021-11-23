@@ -111,7 +111,7 @@ def report_blood_sugar_reading(body):
     #//return NoContent, 201 #Remove the previous POST API endpoints as new events will now be received through messages from Kafka.
     
 
-def report_cortisol_level_readings(body):
+def report_cortisol_level_reading(body):
     """ Receives a cortisol level reading """
 
     session = DB_SESSION()
@@ -174,7 +174,7 @@ def process_messages():
                 
             elif msg["type"] == "cortisol-level": # Change this to your event type 
                 #Store the event2 (i.e., the payload) to the DB
-                report_cortisol_level_readings(payload)
+                report_cortisol_level_reading(payload)
 
             # Commit the new message as being read
             consumer.commit_offsets()

@@ -1,7 +1,7 @@
 version: 1
 report_blood_sugar_reading:
   url: http://localhost:8080/readings/blood-sugar
-report_cortisol_level_readings:
+report_cortisol_level_reading:
   url: http://localhost:8080/readings/cortisol-level
 events: 
   hostname: <DNS of your Azure VM>
