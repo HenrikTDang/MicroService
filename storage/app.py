@@ -68,7 +68,7 @@ def get_blood_sugar_reading(start_timestamp, end_timestamp):
         trans_list.append(tran.to_dict())
     session.close()
 
-    logger.info("Query for Instore Sales after %s returns %d results" %(start_timestamp, len(trans_list)))
+    logger.info("Query for Blood Sugar after %s returns %d results" %(start_timestamp, len(trans_list)))
     
     return trans_list, 200  
 
@@ -85,7 +85,7 @@ def get_cortisol_level_readings(start_timestamp, end_timestamp):
         trans_list.append(tran.to_dict())
     session.close()
 
-    logger.info("Query for Online Sales after %s returns %d results" %(start_timestamp, len(trans_list)))
+    logger.info("Query for Cortisol Levels after %s returns %d results" %(start_timestamp, len(trans_list)))
     
     return trans_list, 200
 
