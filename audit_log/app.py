@@ -60,7 +60,7 @@ def get_blood_sugar_reading(index):
     logger.error("Could not find BP at index %d" % index)
     return { "message": "Not Found"}, 404
 
-def get_cortisol_level_readings(index):
+def get_cortisol_level_reading(index):
     """ Get online Reading in History """
     hostname = "%s:%d" % (app_config["events"]["hostname"],
     app_config["events"]["port"])

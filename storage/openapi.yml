@@ -81,7 +81,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/cortisol-levels'
+                  $ref: '#/components/schemas/CortisolLevelReadings'
         "400":
           description: Invalid request
           content:
@@ -91,42 +91,6 @@ paths:
                 properties:
                   message:
                     type: string
-  # /readings/blood-sugar:
-  #   post:
-  #     tags:
-  #     - blood-sugar
-  #     summary: reports a blood sugar reading
-  #     description: "posts blood sugar readings to the device\n"
-  #     operationId: app.report_blood_sugar_reading
-  #     requestBody:
-  #       description: blood-sugar readings to add
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/BloodSugarReadings'
-  #     responses:
-  #       "201":
-  #         description: item created
-  #       "400":
-  #         description: invalid input, object invalid
-  # /readings/cortisol-levels:
-  #   post:
-  #     tags:
-  #     - cortisol
-  #     summary: reports a cortisol level reading
-  #     description: "posts cortisol level readings to the device\n"
-  #     operationId: app.report_cortisol_level_readings
-  #     requestBody:
-  #       description: coritsol-level readings to add
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/CortisolLevelReadings'
-  #     responses:
-  #       "201":
-  #         description: item created
-  #       "400":
-  #         description: invalid input, object invalid
 components:
   schemas:
     BloodSugarReadings:

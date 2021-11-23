@@ -9,15 +9,6 @@ from datetime import datetime
 import datetime
 
 
-# with open('log_conf.yml', 'r') as f: 
-#     log_config = yaml.safe_load(f.read())
-#     logging.config.dictConfig(log_config)
-
-# logger = logging.getLogger('basicLogger')
-
-# with open('app_conf.yml', 'r') as f: 
-#     app_config = yaml.safe_load(f.read())
-
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
     print("In Test Environment")
     app_conf_file = "/config/app_conf.yml"
@@ -48,35 +39,15 @@ while retry_count < max_retry:
     try:
         client = KafkaClient(hosts= hostname)
         topic = client.topics[str.encode(app_config["events"]["topic"])]
+        producer = topic.get_sync_producer()
         retry_count = max_retry
     except:
         logger.error("Cannot Connect to Kafka. The connection failed")
         time.sleep(app_config["connecting_kafka"]["time_sleep"])
         retry_count += 1
 
-# def get_instore_sales(timestamp):
-#     logger.info("Received event get_instore_sales request {}".format(uuid.uuid4()))
-#     request = requests.get(app_config['get_instore_sales']['url']+"?timestamp="+json.dumps(timestamp))
-#     logger.info("Returned event get_instore_sales response  {} with status {}".format(uuid.uuid4(),request.status_code))
-#     return Response(response=request.content,status=200,headers={'Content-type': 'application/json'})
-
-# def get_online_sales(timestamp):
-#     logger.info("Received event get_groups request {}".format(uuid.uuid4()))
-#     request = requests.get(app_config['get_online_sales']['url']+"?timestamp="+json.dumps(timestamp))
-#     logger.info("Returned event get_online_sales response  {} with status {}".format(uuid.uuid4(),request.status_code))
-#     return Response(response=request.content,status=200,headers={'Content-type': 'application/json'})
-
-
 def report_blood_sugar_reading(body):
     logger.info(f"Received event report_blood_sugar_reading request with a unique id of {body['patient_id']}")
-
-    # request_url = app_config['report_blood_sugar_reading']['url']
-    # response = requests.post(request_url, data= json.dumps(body) ,headers={'Content-Type':'application/json'})
-    # logger.info(f"Returned event report_blood_sugar_reading response(ID: {body['patient_id']}) with status {response.status_code}")
-
-    client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}')
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
-    producer = topic.get_sync_producer()
 
     msg = {"type": "bs",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
@@ -87,17 +58,8 @@ def report_blood_sugar_reading(body):
     return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 
-
-def report_cortisol_level_readings(body):
+def report_cortisol_level_reading(body):
     logger.info(f"Received event report_cortisol_level_readings request with a unique id of {body['patient_id']}")
-
-    # request_url = app_config['report_cortisol_level_readings']['url']
-    # response = requests.post(request_url, data= json.dumps(body) ,headers={'Content-Type':'application/json'})
-    # logger.info(f"Returned event report_cortisol_level_readings response(ID: {body['patient_id']}) with status {response.status_code}")
-
-    client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}')
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
-    producer = topic.get_sync_producer()
 
     msg = {"type": "cl",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),

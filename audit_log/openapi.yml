@@ -12,7 +12,7 @@ paths:
   /readings/blood-sugar:  
     get:
       tags:
-      - blood-sugar
+        - blood-sugar
       summary: gets new data for in-store sales
       description: "get new data for in-store sales figures"
       operationId: app.get_blood_sugar_reading
@@ -54,10 +54,10 @@ paths:
   /readings/cortisol-levels:
     get:
       tags:
-      - cortisol-levels
+        - cortisol-levels
       summary: gets new data for online sales
       description: "get new data for online sales figures"
-      operationId: app.cortisol-levels
+      operationId: app.get_cortisol_level_reading
       parameters:
         - name: index
           in: query
