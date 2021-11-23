@@ -1,13 +1,13 @@
-version: 1 
-get_instore_sales: 
-  url: http://localhost:8090/sales/instore  
-instore_sales: 
-  url: http://localhost:8090/sales/instore
-get_online_sales:
-  url: http://localhost:8090/sales/online
-online_sales: 
-  url: http://localhost:8090/sales/online
+version: 1
+get_blood_sugar_reading:
+  url: http://localhost:8090/readings/blood-sugar
+report_blood_sugar_reading:
+  url: http://localhost:8090/readings/blood-sugar
+get_cortisol_level_readings:
+  url: http://localhost:8090/readings/cortisol-levels
+report_cortisol_level_readings:
+  url: http://localhost:8090/readings/cortisol-levels
 events: 
-  hostname: microservice-henrik.eastus.cloudapp.azure.com
+  hostname: <DNS of your Azure VM>
   port: 9092 
   topic: events

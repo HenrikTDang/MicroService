@@ -29,7 +29,7 @@ logger = logging.getLogger('basicLogger')
 logger.info("App Conf File: %s" % app_conf_file) 
 logger.info("Log Conf File: %s" % log_conf_file)
 
-def get_instore_sales(index):
+def get_blood_sugar_reading(index):
     """ Get instore Reading in History """
     hostname = "%s:%d" % (app_config["events"]["hostname"],
                         app_config["events"]["port"])
@@ -49,7 +49,7 @@ def get_instore_sales(index):
             msg = json.loads(msg_str)
         # Find the event at the index you want and # return code 200
         # i.e., return event, 200
-            if msg["type"] == "instore":
+            if msg["type"] == "blood-sugar":
                 my_ls.append(msg['payload'])
         if len(my_ls) > index:
             event = my_ls[index]
@@ -60,7 +60,7 @@ def get_instore_sales(index):
     logger.error("Could not find BP at index %d" % index)
     return { "message": "Not Found"}, 404
 
-def get_online_sales(index):
+def get_cortisol_level_readings(index):
     """ Get online Reading in History """
     hostname = "%s:%d" % (app_config["events"]["hostname"],
     app_config["events"]["port"])
@@ -79,7 +79,7 @@ def get_online_sales(index):
             msg = json.loads(msg_str)
         # Find the event at the index you want and # return code 200
         # i.e., return event, 200
-            if msg["type"] == "online":
+            if msg["type"] == "cortisol-levels":
                 my_ls.append(msg['payload'])
         if len(my_ls) > index:
             event = my_ls[index]

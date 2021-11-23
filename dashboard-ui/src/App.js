@@ -6,7 +6,7 @@ import AppStats from './components/AppStats'
 
 function App() {
 
-    const endpoints = ["/sales/instore", "/sales/online"]
+    const endpoints = ["/readings/blood-sugar", "/readings/cortisol-levels"]
 
     const rendered_endpoints = endpoints.map((endpoint) => {
         return <EndpointAudit key={endpoint} endpoint={endpoint}/>
@@ -22,7 +22,6 @@ function App() {
             </div>
         </div>
     );
-
 }
 
 

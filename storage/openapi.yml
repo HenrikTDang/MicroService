@@ -1,40 +1,22 @@
 openapi: 3.0.0
 
 info:
-  title: Sales Analyzer API
-  description: This API receives sales data for analyzing
+  title: Health App API
+  description: This API receives reading events from diabetic medical devices
   contact:
-    email: henrikt.dang@gmail.com
+    email: jlodhra@bcit.ca
   version: 1.0.0
 tags:
-- name: sales
-  description: operations relates to sales
+- name: readings
+  description: Operations available to diabetic medical device readings
 paths:
-  /sales/instore:
-    #// post:   #Remove the POST API endpoints as new events will now be received through messages from Kafka.
-    #//   tags:
-    #//   - instore
-    #//   summary: reports data for in-store sales
-    #//   description: "post in-store sales figures to the system responses \n"
-    #//   operationId: app.instore_sales
-    #//   requestBody:
-    #//     description: sales figures to add
-    #//     content:
-    #//       application/json:
-    #//         schema:
-    #//           $ref: '#/components/schemas/InStoreSales'
-      #// responses: #Remove the POST API endpoints as new events will now be received through messages from Kafka.
-      #//   "201":
-      #//     description: item created
-      #//   "400":
-      #//     description: invalid input, object invalid
-          
+  /readings/blood-sugar:  
     get:
       tags:
-      - instore
+      - blood-sugar
       summary: gets new data for in-store sales
       description: "get new data for in-store sales figures"
-      operationId: app.get_instore_sales
+      operationId: app.get_blood_sugar_reading
       parameters:
       - name: start_timestamp
         in: query
@@ -58,7 +40,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/InStoreSales'
+                  $ref: '#/components/schemas/BloodSugarReadings'
         "400":
           description: Invalid request
           content:
@@ -69,32 +51,13 @@ paths:
                   message:
                     type: string
 
-  /sales/online:
-    #//post: #Remove the POST API endpoints as new events will now be received through messages from Kafka.
-    #//  tags:
-    #//  - online
-    #//  summary: reports data for online sales#//
-    #//  description: "post online sales figures to the system responses \n"
-    #//  operationId: app.online_sales
-    #//  requestBody:
-    #//    description: sales figures to add
-    #//    content:
-    #//      application/json:
-    #//        schema:
-    #//          $ref: '#/components/schemas/OnlineSales'
-      #// responses: 
-      #//   "201":
-      #//     description: item created
-      #//   "400":
-      #//     description: invalid input, object invalid
-
-          
+  /readings/cortisol-levels:
     get:
       tags:
-      - online
+      - cortisol-levels
       summary: gets new data for online sales
       description: "get new data for online sales figures"
-      operationId: app.get_online_sales
+      operationId: app.cortisol-levels
       parameters:
       - name: start_timestamp
         in: query
@@ -118,7 +81,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OnlineSales'
+                  $ref: '#/components/schemas/cortisol-levels'
         "400":
           description: Invalid request
           content:
@@ -128,68 +91,85 @@ paths:
                 properties:
                   message:
                     type: string
-                    
+  # /readings/blood-sugar:
+  #   post:
+  #     tags:
+  #     - blood-sugar
+  #     summary: reports a blood sugar reading
+  #     description: "posts blood sugar readings to the device\n"
+  #     operationId: app.report_blood_sugar_reading
+  #     requestBody:
+  #       description: blood-sugar readings to add
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/BloodSugarReadings'
+  #     responses:
+  #       "201":
+  #         description: item created
+  #       "400":
+  #         description: invalid input, object invalid
+  # /readings/cortisol-levels:
+  #   post:
+  #     tags:
+  #     - cortisol
+  #     summary: reports a cortisol level reading
+  #     description: "posts cortisol level readings to the device\n"
+  #     operationId: app.report_cortisol_level_readings
+  #     requestBody:
+  #       description: coritsol-level readings to add
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/CortisolLevelReadings'
+  #     responses:
+  #       "201":
+  #         description: item created
+  #       "400":
+  #         description: invalid input, object invalid
 components:
   schemas:
-    InStoreSales:
+    BloodSugarReadings:
       required:
-      - bill_amount
-      - customer_id
-      - product_id
-      - sales_date
-      - store_id
+        - patient_id
+        - device_id
+        - timestamp
+        - blood_sugar
       type: object
       properties:
-        product_id:
+        patient_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        store_id:
+        device_id:
           type: string
-          example: S123
-        customer_id:
-          type: string
-          example: P000000
-        sales_date:
-          type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-        bill_amount:
-          $ref: '#/components/schemas/SalesAmount'
-    OnlineSales:
-      required:
-      - bill_amount
-      - customer_id
-      - delivery_info
-      - product_id
-      - sales_date
-      type: object
-      properties:
-        product_id:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        customer_id:
-          type: string
-          example: I000000
-        delivery_info:
-          type: string
-          example: 123 Nelson Ave, Burnaby, Canada V5J 1P1
-        sales_date:
-          type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-        bill_amount:
-          $ref: '#/components/schemas/SalesAmount'
-    SalesAmount:
-      required:
-      - quantity
-      - unit_price
-      type: object
-      properties:
-        quantity:
+          example: BS9237
+        blood_sugar:
           type: integer
-          example: 100
-        unit_price:
-          type: number
-          example: 10.99
+          example: 5
+        timestamp:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    CortisolLevelReadings:
+      required:
+        - patient_id
+        - device_id
+        - timestamp
+        - cortisol_level
+      type: object
+      properties:
+        patient_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        device_id:
+          type: string
+          example: CL9012
+        cortisol_level:
+          type: integer
+          example: 40
+        timestamp:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'

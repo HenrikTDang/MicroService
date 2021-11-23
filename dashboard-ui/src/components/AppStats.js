@@ -8,7 +8,7 @@ export default function AppStats() {
 
 	const getStats = () => {
         
-        fetch(`http://microservice-henrik.eastus.cloudapp.azure.com:8100/stats`)
+        fetch(`http://{{public_dns_hostnames[0]}}:8100/stats`)
             .then(res => res.json())
             .then((result)=>{
 				console.log("Received Stats")
@@ -35,18 +35,18 @@ export default function AppStats() {
                 <table className={"StatsTable"}>
 					<tbody>
 						<tr>
-							<th>Instore Sales</th>
-							<th>Online Sales</th>
+							<th>Blood Sugar readings</th>
+							<th>Cortisol Level readings</th>
 						</tr>
 						<tr>
-							<td># Instore    : {stats['num_instore_sales']}</td>
-							<td># Online: {stats['num_online_sales']}</td>
+							<td># BS : {stats['num_bs_readings']}</td>
+							<td># CL: {stats['num_cl_readings']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Max Instore Qty: {stats['max_instore_qty']}</td>
+							<td colspan="2">Max BS Readings: {stats['max_bs_readings']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Max Online Qtyc: {stats['max_online_qty']}</td>
+							<td colspan="2">Max CL Readings: {stats['max_cl_readings']}</td>
 						</tr>
 					</tbody>
                 </table>

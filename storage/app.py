@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from base import Base
 import datetime, yaml, logging, logging.config, json, time, os
-from instore_sales import InstoreSales
-from online_sales import OnlineSales
+from blood_sugar import BloodSugar
+from cortisol_level import CortisolLevel
 import mysql.connector
 from pykafka.common import OffsetType
 from threading import Thread
@@ -55,14 +55,14 @@ Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-def get_instore_sales(start_timestamp, end_timestamp):
+def get_blood_sugar_reading(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
     # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ") 
     start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     # transactions= session.query(InstoreSales).filter(InstoreSales.date_created >= timestamp_datetime)
-    transactions = session.query(InstoreSales).filter( and_(InstoreSales.date_created >= start_timestamp_datetime, InstoreSales.date_created < end_timestamp_datetime))
+    transactions = session.query(BloodSugar).filter( and_(BloodSugar.date_created >= start_timestamp_datetime, BloodSugar.date_created < end_timestamp_datetime))
     trans_list = []
     for tran in transactions:
         trans_list.append(tran.to_dict())
@@ -72,14 +72,14 @@ def get_instore_sales(start_timestamp, end_timestamp):
     
     return trans_list, 200  
 
-def get_online_sales(start_timestamp, end_timestamp):
+def get_cortisol_level_readings(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
     # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
     start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     # transactions= session.query(OnlineSales).filter(OnlineSales.date_created >= timestamp_datetime)
-    transactions = session.query(OnlineSales).filter( and_(OnlineSales.date_created >= start_timestamp_datetime, OnlineSales.date_created < end_timestamp_datetime))
+    transactions = session.query(CortisolLevel).filter( and_(CortisolLevel.date_created >= start_timestamp_datetime, CortisolLevel.date_created < end_timestamp_datetime))
     trans_list = []
     for tran in transactions:
         trans_list.append(tran.to_dict())
@@ -90,19 +90,20 @@ def get_online_sales(start_timestamp, end_timestamp):
     return trans_list, 200
 
 
-def instore_sales(body):
-    # auto_uuid = str(uuid.uuid4())
-    session = DB_SESSION()
-    instore_entry= InstoreSales(body['product_id'],
-                    body['store_id'],
-                    body['customer_id'],
-                    body['sales_date'],
-                    body['bill_amount']['quantity'],
-                    body['bill_amount']['unit_price'])
-    session.add(instore_entry)
-    unq_id = body['product_id']
+def report_blood_sugar_reading(body):
+    """ Receives a blood sugar reading """
 
-    logger.debug(f'Stored event instore_sales request with a unique id of {unq_id}')
+    session = DB_SESSION()
+
+    bs = BloodSugar(body['patient_id'],
+                    body['device_id'],
+                    body['timestamp'],
+                    body['blood_sugar'])
+
+    session.add(bs)
+    unq_id = body["patient_id"]
+
+    logger.debug(f"Stored event Blood Sugar request with a unique id of {unq_id}")
 
     session.commit()
     session.close()
@@ -110,25 +111,23 @@ def instore_sales(body):
     #//return NoContent, 201 #Remove the previous POST API endpoints as new events will now be received through messages from Kafka.
     
 
-def online_sales(body):
+def report_cortisol_level_readings(body):
+    """ Receives a cortisol level reading """
 
     session = DB_SESSION()
 
-    online_entry = OnlineSales(body['product_id'],
-                    body['customer_id'],
-                    body['delivery_info'],
-                    body['sales_date'],
-                    body['bill_amount']['quantity'],
-                    body['bill_amount']['unit_price'])
+    cl = CortisolLevel(body['patient_id'],
+                        body['device_id'],
+                        body['timestamp'],
+                        body['cortisol_level'])
 
-    unq_id = body['product_id']
-    session.add(online_entry )
+    unq_id = body["patient_id"]
+    session.add(cl)
 
-    logger.debug(f'Stored event online_sales request with a unique id of {unq_id}')
+    logger.debug(f"Stored event Blood Sugar request with a unique id of {unq_id}")
 
     session.commit()
     session.close()
-
     #//return NoContent, 201 #Remove the  POST API endpoints as new events will now be received through messages from Kafka.
 
 def process_messages():
@@ -169,13 +168,13 @@ def process_messages():
 
             payload = msg["payload"]
 
-            if msg["type"] == "instore": #Change this to your event type - Get this from the openapi.yml line 13 `/sales/instore` so event type is `instore`
+            if msg["type"] == "blood-sugar": #Change this to your event type - Get this from the openapi.yml line 13 `/sales/instore` so event type is `instore`
                 # Store the event1 (i.e., the payload) to the DB
-                instore_sales(payload)
+                report_blood_sugar_reading(payload)
                 
-            elif msg["type"] == "online": # Change this to your event type 
+            elif msg["type"] == "cortisol-levels": # Change this to your event type 
                 #Store the event2 (i.e., the payload) to the DB
-                online_sales(payload)
+                report_cortisol_level_readings(payload)
 
             # Commit the new message as being read
             consumer.commit_offsets()

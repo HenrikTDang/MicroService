@@ -1,181 +1,57 @@
 openapi: 3.0.0
 
 info:
-  title: Sales Analyzer API
-  description: This API receives sales data for analyzing
+  title: Health App API
+  description: This API receives reading events from diabetic medical devices
   contact:
-    email: henrikt.dang@gmail.com
+    email: jlodhra@bcit.ca
   version: 1.0.0
 tags:
-- name: sales
-  description: operations relates to sales
+- name: readings
+  description: Operations available to diabetic medical device readings
 paths:
-  /sales/instore:
-    post:
-      tags:
-      - instore
-      summary: reports data for in-store sales
-      description: "post in-store sales figures to the system responses \n"
-      operationId: app.instore_sales
-      requestBody:
-        description: sales figures to add
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InStoreSales'
+  /stats:
+    get:
+      summary: gets the event stats
+      description: "get new data for in-store sales and online sales stats"
+      operationId: app.get_stats
       responses:
-        "201":
-          description: item created
+        "200":
+          description: Successfully returned a list of sales events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
         "400":
-          description: invalid input, object invalid
-          
-    #// get:
-    #//   tags:
-    #//   - instore
-    #//   summary: gets new data for in-store sales
-    #//   description: "get new data for in-store sales figures"
-    #//   operationId: app.get_instore_sales
-    #//   parameters:
-    #//   - name: timestamp
-    #//     in: query
-    #//     description: limits the number of items on a page
-    #//     schema:
-    #//       type: string
-    #//       format: date-time
-    #//       example: '2016-08-29T09:12:33Z'
-    #//   responses:
-    #//     "200":
-    #//       description: Successfully returned a list of in-store sales events
-    #//       content:
-    #//         application/json:
-    #//           schema:
-    #//             type: object
-    #//             items:
-    #//               $ref: '#/components/schemas/InStoreSales'
-    #//     "400":
-    #//       description: Invalid request
-    #//       content:
-    #//         application/json:
-    #//           schema:
-    #//             type: object
-    #//             properties:
-    #//               message:
-    #//                 type: string
-
-  /sales/online:
-    post:
-      tags:
-      - online
-      summary: reports data for online sales
-      description: "post online sales figures to the system responses \n"
-      operationId: app.online_sales
-      requestBody:
-        description: sales figures to add
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OnlineSales'
-      responses:
-        "201":
-          description: item created
-        "400":
-          description: invalid input, object invalid
-
-          
-    #// get:
-    #//   tags:
-    #//   - online
-    #//   summary: gets new data for online sales
-    #//   description: "get new data for online sales figures"
-    #//   operationId: app.get_online_sales
-    #//   parameters:
-    #//   - name: timestamp
-    #//     in: query
-    #//     description: limits the number of items on a page
-    #//     schema:
-    #//       type: string
-    #//       format: date-time
-    #//       example: '2016-08-29T09:12:33Z'
-    #//   responses:
-    #//     "200":
-    #//       description: Successfully returned a list of online sales events
-    #//       content:
-    #//         application/json:
-    #//           schema:
-    #//             type: object
-    #//             items:
-    #//               $ref: '#/components/schemas/OnlineSales'
-    #//     "400":
-    #//       description: Invalid request
-    #//       content:
-    #//         application/json:
-    #//           schema:
-    #//             type: object
-    #//             properties:
-    #//               message:
-    #//                 type: string
-                    
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 components:
   schemas:
-    InStoreSales:
+    ReadingStats:
       required:
-      - bill_amount
-      - customer_id
-      - product_id
-      - sales_date
-      - store_id
+      - num_bs_readings
+      - max_bs_readings
+      - num_cl_readings
+      - max_cl_readings
       type: object
       properties:
-        product_id:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        store_id:
-          type: string
-          example: S123
-        customer_id:
-          type: string
-          example: P000000
-        sales_date:
-          type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-        bill_amount:
-          $ref: '#/components/schemas/SalesAmount'
-    OnlineSales:
-      required:
-      - bill_amount
-      - customer_id
-      - delivery_info
-      - product_id
-      - sales_date
-      type: object
-      properties:
-        product_id:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        customer_id:
-          type: string
-          example: I000000
-        delivery_info:
-          type: string
-          example: 123 Nelson Ave, Burnaby, Canada V5J 1P1
-        sales_date:
-          type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-        bill_amount:
-          $ref: '#/components/schemas/SalesAmount'
-    SalesAmount:
-      required:
-      - quantity
-      - unit_price
-      type: object
-      properties:
-        quantity:
+        num_bs_readings:
+          type: integer
+          example: 5000
+        max_bs_readings:
           type: integer
           example: 100
-        unit_price:
-          type: number
-          example: 10.99
+        num_cl_readings:
+          type: integer
+          example: 8000
+        max_cl_readings:
+          type: integer
+          example: 200

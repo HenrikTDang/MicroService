@@ -67,39 +67,44 @@ while retry_count < max_retry:
 #     return Response(response=request.content,status=200,headers={'Content-type': 'application/json'})
 
 
-def instore_sales(body):
-    logger.info(f"Received event instore_sales request with a unique id of {body['product_id']}")
-    #// response = requests.post(app_config['instore_sales']['url'], json=body)                 ##LAB5
-    #// logger.info(f"Returned event instore_sales response(ID: {body['product_id']}) witt status {response.status_code}")
-    #// return NoContent, response.status_code
+def report_blood_sugar_reading(body):
+    logger.info(f"Received event report_blood_sugar_reading request with a unique id of {body['patient_id']}")
 
-    # client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}') 
-    # topic = client.topics[str.encode(app_config["events"]["topic"])] 
+    # request_url = app_config['report_blood_sugar_reading']['url']
+    # response = requests.post(request_url, data= json.dumps(body) ,headers={'Content-Type':'application/json'})
+    # logger.info(f"Returned event report_blood_sugar_reading response(ID: {body['patient_id']}) with status {response.status_code}")
+
+    client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}')
+    topic = client.topics[str.encode(app_config["events"]["topic"])]
     producer = topic.get_sync_producer()
 
-    msg = { "type": "instore",   #event type Get this from the openapi.yml line 13 `/sales/instore` so event type is `instore`
-        "datetime" : datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        "payload": body }  
+    msg = {"type": "bs",
+           "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+           "payload": body}
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
+    
     return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 
-def online_sales(body):
-    #// headers = {"content-type":"application/json"}
-    logger.info (f"Received event online_sales request with a unique id of {body['product_id']}")
-    #// response = requests.post(app_config['online_sales']['url'], json=body,  headers=headers)    ##LAB5
-    #// logger.info(f"Returned event online_sales response(ID: {body['product_id']}) witt status {response.status_code}")
-    #// return NoContent, response.status_code
-    # client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}') 
-    # topic = client.topics[str.encode(app_config["events"]["topic"])] 
+
+def report_cortisol_level_readings(body):
+    logger.info(f"Received event report_cortisol_level_readings request with a unique id of {body['patient_id']}")
+
+    # request_url = app_config['report_cortisol_level_readings']['url']
+    # response = requests.post(request_url, data= json.dumps(body) ,headers={'Content-Type':'application/json'})
+    # logger.info(f"Returned event report_cortisol_level_readings response(ID: {body['patient_id']}) with status {response.status_code}")
+
+    client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}')
+    topic = client.topics[str.encode(app_config["events"]["topic"])]
     producer = topic.get_sync_producer()
 
-    msg = { "type": "online",   #event type
-        "datetime" : datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        "payload": body }  
+    msg = {"type": "cl",
+           "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+           "payload": body}
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
+
     return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 app = connexion.FlaskApp(__name__, specification_dir='')

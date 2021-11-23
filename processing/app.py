@@ -9,31 +9,6 @@ from flask_cors import CORS, cross_origin
 YAML_FILENAME = 'openapi.yml'   
 YAML_LOCATION = './'
 
-# with open('app_conf.yml', 'r') as f:
-#     app_config = yaml.safe_load(f.read())
-    
-# with open('log_conf.yml', 'r') as f:
-#     log_config = yaml.safe_load(f.read())
-#     logging.config.dictConfig(log_config)
-
-# logger = logging.getLogger('basicLogger')
-
-# def get_stats():
-#     logger.info("Request has started")
-#     try:
-#         with open('data.json', 'r') as f: #!!!! WHY THIS IS NOT WORKING
-#             logger.info("Hello 1")
-#             data=  json.loads(f.read()) 
-#             logger.info("Hello 2", data)
-#             logger.debug("Loaded statistics: {}".format(json.load(f)))
-#             logger.info("Hello 3")
-#             logger.info("get_stats request has been compelted")
-#             return data,200
-#     except: #If the file doesn’t exist
-#         logger.error("Statistic file cannot be found!")
-#         return "Statistics not exist", 404
-
-
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
     print("In Test Environment")
     app_conf_file = "/config/app_conf.yml"
@@ -81,33 +56,36 @@ def populate_stats():
     except:
         "If the file doesn’t yet exist, use default values for the stats"
         with open(app_config['datastore']['filename'],'w') as file:
-            #! Is this work without quoute "num_instore_sales"
-            file.write(json.dumps({"num_instore_sales": 0, "max_instore_qty": 0,"num_online_sales": 0,"max_online_qty": 0,"last_updated": "2016-08-29T09:12:33Z"}))
+            #! Is this work without quoute "num_bs_sales"
+            # file.write(json.dumps({"num_bs_sales": 0, "max_bs_readings": 0,"num_cl_sales": 0,"max_cl_readings": 0,"last_updated": "2016-08-29T09:12:33Z"}))
+            file.write(json.dumps(
+                {"num_bs_readings": 0, "max_bs_readings": 0, "num_cl_readings": 0, "max_cl_readings": 0,
+                    "last_updated": "2016-08-29T09:12:33Z"}))
 
 
     "Query the two GET endpoints from your Data Store Service to get all new events from the last datetime you requested them (from your statistics) to the current datetime"
     # 'last_updated' is written into json in the calculation below
-    # instore_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
-    # online_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
+    # bs_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
+    # cl_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
     last_updated = stats['last_updated']
-    instore_request = requests.get(app_config['evenstore']['url'] + "/sales/instore?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
-    online_request = requests.get(app_config['evenstore']['url'] + "/sales/online?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
-    if  instore_request.status_code != 200:
+    bs_request = requests.get(app_config['evenstore']['url'] + "/readings/blood-sugar?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    cl_request = requests.get(app_config['evenstore']['url'] + "/readings/cortisol-levels?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    if  bs_request.status_code != 200:
         logger.error("ERROR ON Receiving data for instore.")
     else:
         logger.info("Successfully received instore.")
-    if online_request.status_code != 200:
+    if cl_request.status_code != 200:
         logger.error("ERROR ON Receiving data for online.")
     else:
         logger.info("Successfully received online.")
     #Based on the new events from the Data Store Service
-    instore_data = json.loads(instore_request.content)
-    online_data = json.loads(instore_request.content)
-    num_instore = len(instore_data) + stats["num_instore_sales"]
-    num_online = len(online_data) + stats["num_online_sales"]
-    max_instore_qty = max(max([x['bill_amount']['quantity'] for x in instore_data], default=0), stats["max_instore_qty"])
-    max_online_qty = max(max([x['bill_amount']['quantity'] for x in instore_data], default=0), stats["max_online_qty"])
-    data_obj = {"num_instore_sales": num_instore, "max_instore_qty": max_instore_qty,"num_online_sales": num_online,"max_online_qty": max_online_qty,"last_updated":current_timestamp}
+    bs_data = json.loads(bs_request.content)
+    cl_data = json.loads(cl_request.content)
+    num_bs = len(bs_data) + stats["num_bs_readings"]
+    num_cl = len(cl_data) + stats["num_cl_readings"]
+    max_bs_readings = max(max([x['blood_sugar'] for x in bs_data], default=0), stats["max_bs_readings"])
+    max_cl_readings = max(max([x['cortisol_level'] for x in bs_data], default=0), stats["max_cl_readings"])
+    data_obj = {"num_bs_readings": num_bs, "max_bs_readings": max_bs_readings,"num_cl_readings": num_cl,"max_cl_readings": max_cl_readings,"last_updated":current_timestamp}
     with open(app_config['datastore']['filename'],'w') as file:
         file.write(json.dumps(data_obj))
     logger.debug("Successfully saved the new stats: {}".format(data_obj))
