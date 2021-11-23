@@ -72,7 +72,7 @@ def get_blood_sugar_reading(start_timestamp, end_timestamp):
     
     return trans_list, 200  
 
-def get_cortisol_level_readings(start_timestamp, end_timestamp):
+def get_cortisol_level_reading(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
     # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")

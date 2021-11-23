@@ -57,7 +57,7 @@ paths:
       - cortisol-level
       summary: gets new data for online sales
       description: "get new data for online sales figures"
-      operationId: app.get_cortisol_level_readings
+      operationId: app.get_cortisol_level_reading
       parameters:
       - name: start_timestamp
         in: query
