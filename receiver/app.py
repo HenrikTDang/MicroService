@@ -49,7 +49,7 @@ while retry_count < max_retry:
 def report_blood_sugar_reading(body):
     logger.info(f"Received event report_blood_sugar_reading request with a unique id of {body['patient_id']}")
 
-    msg = {"type": "bs",
+    msg = {"type": "blood-sugar",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
            "payload": body}
     msg_str = json.dumps(msg)
@@ -61,7 +61,7 @@ def report_blood_sugar_reading(body):
 def report_cortisol_level_reading(body):
     logger.info(f"Received event report_cortisol_level_readings request with a unique id of {body['patient_id']}")
 
-    msg = {"type": "cl",
+    msg = {"type": "cortisol-levels",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
            "payload": body}
     msg_str = json.dumps(msg)

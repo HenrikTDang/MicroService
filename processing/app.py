@@ -62,7 +62,6 @@ def populate_stats():
                 {"num_bs_readings": 0, "max_bs_readings": 0, "num_cl_readings": 0, "max_cl_readings": 0,
                     "last_updated": "2016-08-29T09:12:33Z"}))
 
-
     "Query the two GET endpoints from your Data Store Service to get all new events from the last datetime you requested them (from your statistics) to the current datetime"
     # 'last_updated' is written into json in the calculation below
     # bs_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
