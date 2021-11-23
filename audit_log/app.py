@@ -79,7 +79,7 @@ def get_cortisol_level_reading(index):
             msg = json.loads(msg_str)
         # Find the event at the index you want and # return code 200
         # i.e., return event, 200
-            if msg["type"] == "cortisol-levels":
+            if msg["type"] == "cortisol-level":
                 my_ls.append(msg['payload'])
         if len(my_ls) > index:
             event = my_ls[index]

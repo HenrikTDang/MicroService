@@ -172,7 +172,7 @@ def process_messages():
                 # Store the event1 (i.e., the payload) to the DB
                 report_blood_sugar_reading(payload)
                 
-            elif msg["type"] == "cortisol-levels": # Change this to your event type 
+            elif msg["type"] == "cortisol-level": # Change this to your event type 
                 #Store the event2 (i.e., the payload) to the DB
                 report_cortisol_level_readings(payload)
 

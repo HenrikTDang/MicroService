@@ -68,7 +68,7 @@ def populate_stats():
     # cl_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
     last_updated = stats['last_updated']
     bs_request = requests.get(app_config['evenstore']['url'] + "/readings/blood-sugar?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
-    cl_request = requests.get(app_config['evenstore']['url'] + "/readings/cortisol-levels?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    cl_request = requests.get(app_config['evenstore']['url'] + "/readings/cortisol-level?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
     if  bs_request.status_code != 200:
         logger.error("ERROR ON Receiving data for instore.")
     else:

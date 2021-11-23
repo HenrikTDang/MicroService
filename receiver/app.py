@@ -60,11 +60,11 @@ def report_blood_sugar_reading(body):
     return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 
-def report_cortisol_level_reading(body):
+def report_cortisol_level_readings(body):
     logger.info(f"Received event report_cortisol_level_readings request with a unique id of {body['patient_id']}")
     producer = topic.get_sync_producer()
-    
-    msg = {"type": "cortisol-levels",
+
+    msg = {"type": "cortisol-level",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
            "payload": body}
     msg_str = json.dumps(msg)

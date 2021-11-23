@@ -51,10 +51,10 @@ paths:
                   message:
                     type: string
 
-  /readings/cortisol-levels:
+  /readings/cortisol-level:
     get:
       tags:
-        - cortisol-levels
+        - cortisol-level
       summary: gets new data for online sales
       description: "get new data for online sales figures"
       operationId: app.get_cortisol_level_reading
