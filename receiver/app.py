@@ -48,6 +48,7 @@ while retry_count < max_retry:
     try:
         client = KafkaClient(hosts= hostname)
         topic = client.topics[str.encode(app_config["events"]["topic"])]
+        producer = topic.get_sync_producer()
         retry_count = max_retry
     except:
         logger.error("Cannot Connect to Kafka. The connection failed")
@@ -75,7 +76,7 @@ def instore_sales(body):
 
     # client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}') 
     # topic = client.topics[str.encode(app_config["events"]["topic"])] 
-    producer = topic.get_sync_producer()
+    # producer = topic.get_sync_producer()
 
     msg = { "type": "instore",   #event type Get this from the openapi.yml line 13 `/sales/instore` so event type is `instore`
         "datetime" : datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
@@ -93,7 +94,7 @@ def online_sales(body):
     #// return NoContent, response.status_code
     # client = KafkaClient(hosts=f'{app_config["events"]["hostname"]}:{app_config["events"]["port"]}') 
     # topic = client.topics[str.encode(app_config["events"]["topic"])] 
-    producer = topic.get_sync_producer()
+    # producer = topic.get_sync_producer()
 
     msg = { "type": "online",   #event type
         "datetime" : datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
