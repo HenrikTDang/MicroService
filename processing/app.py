@@ -77,7 +77,7 @@ def populate_stats():
     "Read in the current statistics from the JSON file (filename defined in your configuration)"
     try:
         with open(app_config['datastore']['filename'], 'r') as f:
-            stats = json.load(f)    
+            stats = json.loads(f.read())    
     except:
         "If the file doesn’t yet exist, use default values for the stats"
         with open(app_config['datastore']['filename'],'w') as file:
