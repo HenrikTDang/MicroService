@@ -1,10 +1,12 @@
 version: 1 
 datastore: 
-  filename: data.json 
+  filename: /data/data.json
 scheduler: 
   period_sec: 5 
 evenstore:
-  url: < DNS of the VM>
+  url: "http://microservice-week9.eastus.cloudapp.azure.com/storage"
+# evenstore:
+#   url: http://localhost:8090/
 # get_instore_sales: 
 #   url: http://localhost:8090/sales/instore?timestamp=  
 # get_online_sales:
