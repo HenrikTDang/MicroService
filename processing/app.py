@@ -67,8 +67,8 @@ def populate_stats():
     # bs_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
     # cl_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
     last_updated = stats['last_updated']
-    bs_request = requests.get(app_config['evenstore']['url'] + "/readings/blood-sugar?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
-    cl_request = requests.get(app_config['evenstore']['url'] + "/readings/cortisol-level?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    bs_request = requests.get(app_config['eventstore']['url'] + "/readings/blood-sugar?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    cl_request = requests.get(app_config['eventstore']['url'] + "/readings/cortisol-level?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
     if  bs_request.status_code != 200:
         logger.error("ERROR ON Receiving data for instore.")
     else:
@@ -83,7 +83,7 @@ def populate_stats():
     num_bs = len(bs_data) + stats["num_bs_readings"]
     num_cl = len(cl_data) + stats["num_cl_readings"]
     max_bs_readings = max(max([x['blood_sugar'] for x in bs_data], default=0), stats["max_bs_readings"])
-    max_cl_readings = max(max([x['cortisol_level'] for x in bs_data], default=0), stats["max_cl_readings"])
+    max_cl_readings = max(max([x['cortisol_level'] for x in cl_data], default=0), stats["max_cl_readings"])
     data_obj = {"num_bs_readings": num_bs, "max_bs_readings": max_bs_readings,"num_cl_readings": num_cl,"max_cl_readings": max_cl_readings,"last_updated":current_timestamp}
     with open(app_config['datastore']['filename'],'w') as file:
         file.write(json.dumps(data_obj))

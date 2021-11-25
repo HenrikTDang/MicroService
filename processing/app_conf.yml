@@ -3,8 +3,8 @@ datastore:
   filename: data.json 
 scheduler: 
   period_sec: 5 
-evenstore:
-  url: http://localhost:8090/
+eventstore:
+  url: http://localhost:8090
 # get_instore_sales: 
 #   url: http://localhost:8090/sales/instore?timestamp=  
 # get_online_sales:

@@ -29,7 +29,7 @@ class BloodSugar(Base):
         dict['id'] = self.id
         dict['patient_id'] = self.patient_id
         dict['device_id'] = self.device_id
-        dict['blood_sugar'] = {}
+        dict['blood_sugar'] = self.blood_sugar
         dict['timestamp'] = self.timestamp
         dict['date_created'] = self.date_created
 
