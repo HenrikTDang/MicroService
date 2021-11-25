@@ -3,7 +3,7 @@ datastore:
   filename: data.json 
 scheduler: 
   period_sec: 5 
-evenstore:
+eventstore:
   url: < DNS of the VM>
 # get_instore_sales: 
 #   url: http://localhost:8090/sales/instore?timestamp=  

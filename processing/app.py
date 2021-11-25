@@ -90,8 +90,8 @@ def populate_stats():
     # instore_request = requests.get(app_config['get_instore_sales']['url']+stats['last_updated'])
     # online_request = requests.get(app_config['get_online_sales']['url']+stats['last_updated'])
     last_updated = stats['last_updated']
-    instore_request = requests.get(app_config['evenstore']['url'] + "/sales/instore?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
-    online_request = requests.get(app_config['evenstore']['url'] + "/sales/online?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    instore_request = requests.get(app_config['eventstore']['url'] + "/sales/instore?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
+    online_request = requests.get(app_config['eventstore']['url'] + "/sales/online?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
     if  instore_request.status_code != 200:
         logger.error("ERROR ON Receiving data for instore.")
     else:
