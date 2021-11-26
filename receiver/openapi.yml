@@ -9,11 +9,11 @@ tags:
 - name: readings
   description: Operations available to diabetic medical device readings
 paths:
-  /readings/blood-sugar:
+  /readings/personal_information:
     post:
       summary: reports a blood sugar reading
       description: "Adds a new blood sugar reading to the system"
-      operationId: app.report_blood_sugar_reading
+      operationId: app.personal_information
       responses:
         "201": 
           description: item created i.e. success
@@ -23,13 +23,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BloodSugarReadings'
+              $ref: '#/components/schemas/PersonalInformationEntry'
 
-  /readings/cortisol:
+  /readings/start_end_date:
     post:
       summary: reports a cortisol reading
       description: "Adds a new cortisol reading to the system"
-      operationId: app.report_cortisol_level_reading
+      operationId: app.start_end_date
       responses:
         "201": 
           description: item created i.e. success
@@ -39,51 +39,50 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CortisolLevelReadings'
+              $ref: '#/components/schemas/MembershipValidity'
 
 components:
   schemas:
-    BloodSugarReadings:
+    PersonalInformationEntry:
       required:
-        - patient_id
-        - device_id
-        - timestamp
-        - blood_sugar
+        - member_id
+        - name
+        - address
+        - age
       type: object
       properties:
-        patient_id:
+        member_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        device_id:
+        name:
           type: string
-          example: BS9237
-        blood_sugar:
+          example: 'Annson Ramos'
+        age:
           type: integer
-          example: 5
-        timestamp:
+          example: 20
+        address:
           type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-    CortisolLevelReadings:
+          example: '123 Cambie St, Vancouver'
+    MembershipValidity:
       required:
-        - patient_id
-        - device_id
-        - timestamp
-        - cortisol_level
+        - member_id
+        - location_id
+        - start_date
+        - duration_months
       type: object
       properties:
-        patient_id:
+        member_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        device_id:
+        location_id:
           type: string
           example: CL9012
-        cortisol_level:
+        duration_months:
           type: integer
           example: 40
-        timestamp:
+        start_date:
           type: string
           format: date-time
           example: '2016-08-29T09:12:33.001Z'

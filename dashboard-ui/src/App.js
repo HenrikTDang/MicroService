@@ -6,7 +6,7 @@ import AppStats from './components/AppStats'
 
 function App() {
 
-    const endpoints = ["/readings/blood-sugar", "/readings/cortisol-level"]
+    const endpoints = ["/readings/personal_information", "/readings/start_end_date"]
 
     const rendered_endpoints = endpoints.map((endpoint) => {
         return <EndpointAudit key={endpoint} endpoint={endpoint}/>

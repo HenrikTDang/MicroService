@@ -37,21 +37,21 @@ components:
   schemas:
     ReadingStats:
       required:
-      - num_bs_readings
-      - max_bs_readings
-      - num_cl_readings
-      - max_cl_readings
+      - num_personal_info_readings
+      - max_personal_info_reading
+      - num_membership_validate_readings
+      - max_membership_validate_readings
       type: object
       properties:
-        num_bs_readings:
+        num_personal_info_readings:
           type: integer
           example: 5000
-        max_bs_readings:
+        max_personal_info_reading:
           type: integer
-          example: 100
-        num_cl_readings:
+          example: 75
+        num_membership_validate_readings:
           type: integer
           example: 8000
-        max_cl_readings:
+        max_membership_validate_readings:
           type: integer
-          example: 200
+          example: 100

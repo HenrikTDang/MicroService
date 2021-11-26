@@ -29,7 +29,7 @@ logger = logging.getLogger('basicLogger')
 logger.info("App Conf File: %s" % app_conf_file) 
 logger.info("Log Conf File: %s" % log_conf_file)
 
-def get_blood_sugar_reading(index):
+def get_personal_info(index):
     """ Get instore Reading in History """
     hostname = "%s:%d" % (app_config["events"]["hostname"],
                         app_config["events"]["port"])
@@ -49,7 +49,7 @@ def get_blood_sugar_reading(index):
             msg = json.loads(msg_str)
         # Find the event at the index you want and # return code 200
         # i.e., return event, 200
-            if msg["type"] == "blood-sugar":
+            if msg["type"] == "personal_information":
                 my_ls.append(msg['payload'])
         if len(my_ls) > index:
             event = my_ls[index]
@@ -60,7 +60,7 @@ def get_blood_sugar_reading(index):
     logger.error("Could not find BP at index %d" % index)
     return { "message": "Not Found"}, 404
 
-def get_cortisol_level_reading(index):
+def get_membership_validity(index):
     """ Get online Reading in History """
     hostname = "%s:%d" % (app_config["events"]["hostname"],
     app_config["events"]["port"])
@@ -79,7 +79,7 @@ def get_cortisol_level_reading(index):
             msg = json.loads(msg_str)
         # Find the event at the index you want and # return code 200
         # i.e., return event, 200
-            if msg["type"] == "cortisol-level":
+            if msg["type"] == "start_end_date":
                 my_ls.append(msg['payload'])
         if len(my_ls) > index:
             event = my_ls[index]

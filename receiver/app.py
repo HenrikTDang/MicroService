@@ -46,12 +46,12 @@ while retry_count < max_retry:
         time.sleep(app_config["connecting_kafka"]["time_sleep"])
         retry_count += 1
 
-def report_blood_sugar_reading(body):
-    logger.info(f"Received event report_blood_sugar_reading request with a unique id of {body['patient_id']}")
+def personal_information(body):
+    logger.info(f"Received event personal_information request with a unique id of {body['member_id']}")
 
     producer = topic.get_sync_producer()
 
-    msg = {"type": "blood-sugar",
+    msg = {"type": "personal_information",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
            "payload": body}
     msg_str = json.dumps(msg)
@@ -60,11 +60,11 @@ def report_blood_sugar_reading(body):
     return msg_str, 201 #! You will need to hard-code your status code to 201 since you will no longer get it from the response of the requests.post call
 
 
-def report_cortisol_level_reading(body):
-    logger.info(f"Received event report_cortisol_level_reading request with a unique id of {body['patient_id']}")
+def start_end_date(body):
+    logger.info(f"Received event start_end_date request with a unique id of {body['member_id']}")
     producer = topic.get_sync_producer()
 
-    msg = {"type": "cortisol-level",
+    msg = {"type": "start_end_date",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
            "payload": body}
     msg_str = json.dumps(msg)

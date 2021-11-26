@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from base import Base
 import datetime, yaml, logging, logging.config, json, time, os
-from blood_sugar import BloodSugar
-from cortisol_level import CortisolLevel
+from personal_information import PersonalInformationEntry
+from membership_validity import MembershipValidity
 import mysql.connector
 from pykafka.common import OffsetType
 from threading import Thread
@@ -55,14 +55,14 @@ Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-def get_blood_sugar_reading(start_timestamp, end_timestamp):
+def get_personal_info(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
     # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ") 
     start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     # transactions= session.query(InstoreSales).filter(InstoreSales.date_created >= timestamp_datetime)
-    transactions = session.query(BloodSugar).filter( and_(BloodSugar.date_created >= start_timestamp_datetime, BloodSugar.date_created < end_timestamp_datetime))
+    transactions = session.query(PersonalInformationEntry).filter( and_(PersonalInformationEntry.date_created >= start_timestamp_datetime, PersonalInformationEntry.date_created < end_timestamp_datetime))
     trans_list = []
     for tran in transactions:
         trans_list.append(tran.to_dict())
@@ -72,14 +72,14 @@ def get_blood_sugar_reading(start_timestamp, end_timestamp):
     
     return trans_list, 200  
 
-def get_cortisol_level_reading(start_timestamp, end_timestamp):
+def get_membership_validity(start_timestamp, end_timestamp):
     "Gets new instore_sales event data after timestamp"
     session=DB_SESSION()
     # timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
     start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ") # Storage Service endpoints before only take a single timestamp, so the Processing won't know the end time 9*3
     # transactions= session.query(OnlineSales).filter(OnlineSales.date_created >= timestamp_datetime)
-    transactions = session.query(CortisolLevel).filter( and_(CortisolLevel.date_created >= start_timestamp_datetime, CortisolLevel.date_created < end_timestamp_datetime))
+    transactions = session.query(MembershipValidity).filter( and_(MembershipValidity.date_created >= start_timestamp_datetime, MembershipValidity.date_created < end_timestamp_datetime))
     trans_list = []
     for tran in transactions:
         trans_list.append(tran.to_dict())
@@ -90,18 +90,18 @@ def get_cortisol_level_reading(start_timestamp, end_timestamp):
     return trans_list, 200
 
 
-def report_blood_sugar_reading(body):
+def personal_information(body):
     """ Receives a blood sugar reading """
 
     session = DB_SESSION()
 
-    bs = BloodSugar(body['patient_id'],
-                    body['device_id'],
-                    body['timestamp'],
-                    body['blood_sugar'])
+    bs = PersonalInformationEntry(body['member_id'],
+                    body['name'],
+                    body['address'],
+                    body['age'])
 
     session.add(bs)
-    unq_id = body["patient_id"]
+    unq_id = body["member_id"]
 
     logger.debug(f"Stored event Blood Sugar request with a unique id of {unq_id}")
 
@@ -111,17 +111,17 @@ def report_blood_sugar_reading(body):
     #//return NoContent, 201 #Remove the previous POST API endpoints as new events will now be received through messages from Kafka.
     
 
-def report_cortisol_level_reading(body):
+def start_end_date(body):
     """ Receives a cortisol level reading """
 
     session = DB_SESSION()
 
-    cl = CortisolLevel(body['patient_id'],
-                        body['device_id'],
-                        body['timestamp'],
-                        body['cortisol_level'])
+    cl = MembershipValidity(body['member_id'],
+                        body['location_id'],
+                        body['start_date'],
+                        body['duration_months'])
 
-    unq_id = body["patient_id"]
+    unq_id = body["member_id"]
     session.add(cl)
 
     logger.debug(f"Stored event Blood Sugar request with a unique id of {unq_id}")
@@ -168,13 +168,13 @@ def process_messages():
 
             payload = msg["payload"]
 
-            if msg["type"] == "blood-sugar": #Change this to your event type - Get this from the openapi.yml line 13 `/sales/instore` so event type is `instore`
+            if msg["type"] == "personal_information": #Change this to your event type - Get this from the openapi.yml line 13 `/sales/instore` so event type is `instore`
                 # Store the event1 (i.e., the payload) to the DB
-                report_blood_sugar_reading(payload)
+                personal_information(payload)
                 
-            elif msg["type"] == "cortisol-level": # Change this to your event type 
+            elif msg["type"] == "start_end_date": # Change this to your event type 
                 #Store the event2 (i.e., the payload) to the DB
-                report_cortisol_level_reading(payload)
+                start_end_date(payload)
 
             # Commit the new message as being read
             consumer.commit_offsets()

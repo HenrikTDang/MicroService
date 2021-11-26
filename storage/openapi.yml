@@ -10,13 +10,13 @@ tags:
 - name: readings
   description: Operations available to diabetic medical device readings
 paths:
-  /readings/blood-sugar:  
+  /readings/personal_information:  
     get:
       tags:
-      - blood-sugar
+      - personal_information
       summary: gets new data for in-store sales
       description: "get new data for in-store sales figures"
-      operationId: app.get_blood_sugar_reading
+      operationId: app.get_personal_info
       parameters:
       - name: start_timestamp
         in: query
@@ -40,7 +40,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BloodSugarReadings'
+                  $ref: '#/components/schemas/PersonalInformationEntry'
         "400":
           description: Invalid request
           content:
@@ -51,13 +51,13 @@ paths:
                   message:
                     type: string
 
-  /readings/cortisol-level:
+  /readings/start_end_date:
     get:
       tags:
-      - cortisol-level
+      - start_end_date
       summary: gets new data for online sales
       description: "get new data for online sales figures"
-      operationId: app.get_cortisol_level_reading
+      operationId: app.get_membership_validity
       parameters:
       - name: start_timestamp
         in: query
@@ -68,7 +68,7 @@ paths:
           example: '2016-08-29T09:11:33Z'
       - name: end_timestamp
         in: query
-        description: limits the number of items on a page end timestamp
+        description: limits the number of items on a page end address
         schema:
           type: string
           format: date-time
@@ -81,7 +81,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CortisolLevelReadings'
+                  $ref: '#/components/schemas/MembershipValidity'
         "400":
           description: Invalid request
           content:
@@ -93,47 +93,46 @@ paths:
                     type: string
 components:
   schemas:
-    BloodSugarReadings:
+    PersonalInformationEntry:
       required:
-        - patient_id
-        - device_id
-        - timestamp
-        - blood_sugar
+        - member_id
+        - name
+        - address
+        - age
       type: object
       properties:
-        patient_id:
+        member_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        device_id:
+        name:
           type: string
-          example: BS9237
-        blood_sugar:
+          example: 'Annson Ramos'
+        age:
           type: integer
-          example: 5
-        timestamp:
+          example: 20
+        address:
           type: string
-          format: date-time
-          example: '2016-08-29T09:12:33.001Z'
-    CortisolLevelReadings:
+          example: '123 Cambie St, Vancouver'
+    MembershipValidity:
       required:
-        - patient_id
-        - device_id
-        - timestamp
-        - cortisol_level
+        - member_id
+        - location_id
+        - start_date
+        - duration_months
       type: object
       properties:
-        patient_id:
+        member_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        device_id:
+        location_id:
           type: string
           example: CL9012
-        cortisol_level:
+        duration_months:
           type: integer
           example: 40
-        timestamp:
+        start_date:
           type: string
           format: date-time
           example: '2016-08-29T09:12:33.001Z'

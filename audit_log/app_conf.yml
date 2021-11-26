@@ -1,12 +1,12 @@
 version: 1
-get_blood_sugar_reading:
-  url: http://localhost:8090/readings/blood-sugar
-report_blood_sugar_reading:
-  url: http://localhost:8090/readings/blood-sugar
-get_cortisol_level_reading:
-  url: http://localhost:8090/readings/cortisol-level
-report_cortisol_level_reading:
-  url: http://localhost:8090/readings/cortisol-level
+get_personal_info:
+  url: http://localhost:8090/readings/personal_information
+personal_information:
+  url: http://localhost:8090/readings/personal_information
+get_membership_validity:
+  url: http://localhost:8090/readings/start_end_date
+start_end_date:
+  url: http://localhost:8090/readings/start_end_date
 events: 
   hostname: <DNS of your Azure VM>
   port: 9092 

@@ -15,22 +15,22 @@ db_name= app_config["datastore"]["db"]
 db_cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(db_name) )
 
 db_cursor.execute('''
-    CREATE TABLE events.blood_sugar
+    CREATE TABLE events.personal_information
     (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-    patient_id VARCHAR(250) NOT NULL,
-    device_id VARCHAR(250) NOT NULL,
-    timestamp VARCHAR(100) NOT NULL,
-    blood_sugar INTEGER NOT NULL,
+    member_id VARCHAR(250) NOT NULL,
+    name VARCHAR(250) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    age INTEGER NOT NULL,
     date_created VARCHAR(100) NOT NULL)
     ''')
 
 db_cursor.execute('''
-    CREATE TABLE events.cortisol_level
+    CREATE TABLE events.membership_validity
     (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-    patient_id VARCHAR(250) NOT NULL,
-    device_id VARCHAR(250) NOT NULL,
-    timestamp VARCHAR(100) NOT NULL,
-    cortisol_level INTEGER NOT NULL,
+    member_id VARCHAR(250) NOT NULL,
+    location_id VARCHAR(250) NOT NULL,
+    start_date VARCHAR(100) NOT NULL,
+    duration_months INTEGER NOT NULL,
     date_created VARCHAR(100) NOT NULL)
     ''')
     
