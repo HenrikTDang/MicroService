@@ -8,6 +8,6 @@ get_cortisol_level_reading:
 report_cortisol_level_reading:
   url: http://localhost:8090/readings/cortisol-level
 events: 
-  hostname: <DNS of your Azure VM>
+  hostname: "microservice-jasleen-new.eastus.cloudapp.azure.com"
   port: 9092 
   topic: events

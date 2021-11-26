@@ -9,7 +9,7 @@ export default function EndpointAudit(props) {
     const [index, setIndex] = useState(null); //Add a state for the index to display Audit Log index and the corresponding Event *9
     
     const getAudit = () => {
-        fetch(`http://{{public_dns_hostnames[0]}}:8200/${props.endpoint}?index=${rand_val}`) // Change the URL to that of your Cloud VM
+        fetch(`http://microservice-jasleen-new.eastus.cloudapp.azure.com:8200/${props.endpoint}?index=${rand_val}`) // Change the URL to that of your Cloud VM
             .then(res => res.json())
             .then((result)=>{
 				console.log("Received Audit Results for " + props.endpoint)
