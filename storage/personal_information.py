@@ -6,7 +6,7 @@ import datetime
 class PersonalInformationEntry(Base):
     """ Blood Sugar """
 
-    __tablename__ = "blood_sugar"
+    __tablename__ = "personal_information"
 
     id = Column(Integer, primary_key=True)
     member_id = Column(String(250), nullable=False)
