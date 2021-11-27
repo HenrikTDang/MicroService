@@ -4,7 +4,7 @@ personal_information:
 start_end_date:
   url: http://localhost:8080/readings/start_end_date
 events: 
-  hostname: <DNS of your Azure VM>
+  hostname: "microservice-annson.eastus.cloudapp.azure.com"
   port: 9092 
   topic: events
 

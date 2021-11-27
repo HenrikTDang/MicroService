@@ -2,12 +2,12 @@ version: 1
 datastore: 
   user: user
   password: Password
-  hostname: <DNS of your Azure VM>
+  hostname: "microservice-annson.eastus.cloudapp.azure.com"
   port: 3306
   db: events
   
 events:
-  hostname: <DNS of your Azure VM>
+  hostname: "microservice-annson.eastus.cloudapp.azure.com"
   port: 9092
   topic: events
 

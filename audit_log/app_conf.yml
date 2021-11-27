@@ -8,6 +8,6 @@ get_membership_validity:
 start_end_date:
   url: http://localhost:8090/readings/start_end_date
 events: 
-  hostname: <DNS of your Azure VM>
+  hostname: "microservice-annson.eastus.cloudapp.azure.com"
   port: 9092 
   topic: events
