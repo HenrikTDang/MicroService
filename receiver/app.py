@@ -55,19 +55,6 @@ while retry_count < max_retry:
         time.sleep(app_config["connecting_kafka"]["time_sleep"])
         retry_count += 1
 
-# def get_instore_sales(timestamp):
-#     logger.info("Received event get_instore_sales request {}".format(uuid.uuid4()))
-#     request = requests.get(app_config['get_instore_sales']['url']+"?timestamp="+json.dumps(timestamp))
-#     logger.info("Returned event get_instore_sales response  {} with status {}".format(uuid.uuid4(),request.status_code))
-#     return Response(response=request.content,status=200,headers={'Content-type': 'application/json'})
-
-# def get_online_sales(timestamp):
-#     logger.info("Received event get_groups request {}".format(uuid.uuid4()))
-#     request = requests.get(app_config['get_online_sales']['url']+"?timestamp="+json.dumps(timestamp))
-#     logger.info("Returned event get_online_sales response  {} with status {}".format(uuid.uuid4(),request.status_code))
-#     return Response(response=request.content,status=200,headers={'Content-type': 'application/json'})
-
-
 def instore_sales(body):
     logger.info(f"Received event instore_sales request with a unique id of {body['product_id']}")
     #// response = requests.post(app_config['instore_sales']['url'], json=body)                 ##LAB5
